@@ -5,18 +5,34 @@
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
+#include <unordered_map>
 
 using namespace std;
 
 struct Registro {
     string fecha;
+    int dia;
     string hora;
     string ip;
     string mensaje;
 };
 
 bool compareRegistros(const Registro& a, const Registro& b) {
-    return a.fecha < b.fecha || (a.fecha == b.fecha && a.hora < b.hora);
+    unordered_map<std::string, int> months = {
+        {"Jan", 1}, {"Feb", 2}, {"Mar", 3}, {"Apr", 4},
+        {"May", 5}, {"Jun", 6}, {"Jul", 7}, {"Aug", 8},
+        {"Sep", 9}, {"Oct", 10}, {"Nov", 11}, {"Dec", 12}
+    };
+
+    string monthA = a.fecha;
+    string monthB = b.fecha;
+    
+    // Compare the months using the numerical values
+    if (months[monthA] != months[monthB]) {
+        return months[monthA] < months[monthB];  // Sort by month in ascending order
+    }
+
+    return months[a.fecha] < months[b.fecha] || (months[a.fecha] == months[b.fecha] && a.dia < b.dia) || (months[a.fecha] == months[b.fecha] && a.dia == b.dia && a.hora < b.hora) ;
 }
 
 void read(vector<Registro>& registros);
@@ -58,8 +74,10 @@ void read(vector<Registro>& registros) {
         exit(1);
     }
 
+    string line;
     Registro registro;
-    while (archivo >> registro.fecha >> registro.hora >> registro.ip) {
+    while (getline(archivo, line)) {
+        archivo >> registro.fecha >> registro.dia >> registro.hora >> registro.ip;
         // Leer el resto de la línea como el mensaje
         getline(archivo, registro.mensaje);
         registros.push_back(registro);
@@ -72,7 +90,7 @@ void searchAndDisplay(const vector<Registro>& registros, const string& startDate
     cout << "Registros entre " << startDate << " y " << endDate << ":" << endl;
     for (const Registro& registro : registros) {
         if (registro.fecha >= startDate && registro.fecha <= endDate) {
-            cout << registro.fecha << " " << registro.hora << " " << registro.ip << " " << registro.mensaje << endl;
+            cout << registro.fecha << " " << registro.dia << " " << registro.hora << " " << registro.ip << " " << registro.mensaje << endl;
         }
     }
 }
@@ -85,7 +103,7 @@ void saveSortedData(const vector<Registro>& registros) {
     }
 
     for (const Registro& registro : registros) {
-        archivoOrdenado << registro.fecha << " " << registro.hora << " " << registro.ip << " " << registro.mensaje << endl;
+        archivoOrdenado << registro.fecha << " " << registro.dia << " " << registro.hora << " " << registro.ip << " " << registro.mensaje << endl;
     }
 
     archivoOrdenado.close();
