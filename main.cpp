@@ -18,6 +18,13 @@ struct Registro {
 };
 
 bool compareRegistros(const Registro& a, const Registro& b) {
+    // Orden de los meses
+    unordered_map<std::string, int> months = {
+        {"Jan", 1}, {"Feb", 2}, {"Mar", 3}, {"Apr", 4},
+        {"May", 5}, {"Jun", 6}, {"Jul", 7}, {"Aug", 8},
+        {"Sep", 9}, {"Oct", 10}, {"Nov", 11}, {"Dec", 12}
+    }; 
+    
     string monthA = a.fecha;
     string monthB = b.fecha;
     
@@ -30,7 +37,7 @@ bool compareRegistros(const Registro& a, const Registro& b) {
 }
 
 void read(vector<Registro>& registros);
-void searchAndDisplay(const vector<Registro>& registros, const string& startDate, const string& endDate);
+void searchAndDisplay(const vector<Registro>& registros);
 void saveSortedData(const vector<Registro>& registros);
 
 int main() {
@@ -41,26 +48,13 @@ int main() {
         return 1;
     }
 
-    // Orden global de los meses
-    unordered_map<std::string, int> months = {
-        {"Jan", 1}, {"Feb", 2}, {"Mar", 3}, {"Apr", 4},
-        {"May", 5}, {"Jun", 6}, {"Jul", 7}, {"Aug", 8},
-        {"Sep", 9}, {"Oct", 10}, {"Nov", 11}, {"Dec", 12}
-    }; 
+    
 
     // Ordenar registros por fecha y hora
     sort(registros.begin(), registros.end(), compareRegistros);
 
-    // Solicitar al usuario las fechas de inicio y fin de búsqueda
-    string startDate, endDate;
-    int startDay, endDay;
-    cout << "Ingrese la fecha de inicio (MMM DD): ";
-    cin >> startDate >> startDay;
-    cout << "Ingrese la fecha de fin (MMM DD): ";
-    cin >> endDate >> endDay;
-
     // Desplegar registros correspondientes a esas fechas
-    searchAndDisplay(registros, startDate, endDate);
+    searchAndDisplay(registros);
 
     // Almacenar en un archivo el resultado del ordenamiento
     saveSortedData(registros);
@@ -88,17 +82,23 @@ void read(vector<Registro>& registros) {
     archivo.close();
 }
 
-void searchAndDisplay(const vector<Registro>& registros, const string& startDate, const string& endDate, const string& startDay, const string& endDay) {
+void searchAndDisplay(const vector<Registro>& registros) {
+    // Solicitar al usuario las fechas de inicio y fin de búsqueda
+    string startDate, endDate;
+    cout << "Ingrese la fecha de inicio (MMM DD): ";
+    cin >> startDate;
+    cout << "Ingrese la fecha de fin (MMM DD): ";
+    cin >> endDate;
+
     cout << "Registros entre " << startDate << " y " << endDate << ":" << endl;
-    for (const Registro& registro : registros) {
+
+    for (const Registro& registro : registros){
+
         string entryDate = registro.fecha;
         int entryDay = registro.dia;
-        //months[a.fecha] < months[b.fecha] || (months[a.fecha] == months[b.fecha] && a.dia < b.dia)
-        if (months[entryDate] >= months[startDate] && months[entryDate] <= months[endDate]) {            
-            // AQUI NO HAY ORDEN EN LOS MESES CREO. RECHECK. ALSO MAKE SURE IT COUNTS EVERY DAY IF ITS WITHIN A MONTH THAT WASNT SPECIFIED
-            if (entryDay >= startDay && entryDay <= endDay) {
+
+        if ((entryDate >= startDate) && (entryDate <= endDate)) {         
             cout << registro.fecha << " " << registro.dia << " " << registro.hora << " " << registro.ip << " " << registro.mensaje << endl;
-            }
         }
     }
 }
