@@ -37,13 +37,10 @@ bool compareRegistrosDate(const Registro& a, const Registro& b) {
 }
 
 bool compareRegistrosIp(const Registro& a, const Registro& b) {
-    string ipA = a.ip;
-    string ipB = b.ip;
     
-    if (ipA != ipB) {
-        return ipA < ipB;
-    }
-
+    float ipA = stof(a.ip); //ARREGLAR PARA QUE SE ORDENE BIEN
+    float ipB = stof(b.ip); //ARREGLAR PARA QUE SE ORDENE BIEN
+    
     return ipA < ipB;
 }
 
@@ -96,7 +93,7 @@ int main() {
     }
 }
 
-void readDate(vector<Registro>& registros) {
+void read(vector<Registro>& registros) {
     ifstream archivo("bitacora.txt");
     if (!archivo.is_open()) {
         cout << "No se pudo leer el archivo" << endl;
@@ -151,7 +148,7 @@ void searchAndDisplayIp(const vector<Registro>& registros) {
         string entryIp = registro.ip;
 
         if ((entryIp >= startIp) && (entryIp <= endIp)) {         
-            cout << registro.fecha << " " << registro.dia << " " << registro.hora << " " << registro.ip << " " << registro.mensaje << endl;
+            cout << registro.ip << " " << registro.fecha << " " << registro.dia << " " << registro.hora  << " " << registro.mensaje << endl;
         }
     }
 }
