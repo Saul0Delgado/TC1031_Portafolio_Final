@@ -6,6 +6,7 @@
 #include <ctime>
 #include <algorithm>
 #include <unordered_map>
+#include <vector>
 
 using namespace std;
 
@@ -37,11 +38,32 @@ bool compareRegistrosDate(const Registro& a, const Registro& b) {
 }
 
 bool compareRegistrosIp(const Registro& a, const Registro& b) {
+    // ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO 
+    string ipA = a.ip; 
+    string ipB = b.ip; 
+
+    int posInicialA = 0;
+    int posInicialB = 0;
+
+    for (int i = 0; i < ipA.size(); i++){
+        if (ipA[i] == '.') {
+            for (int j = 0; j < ipB.size(); j++){
+                if (ipB[j] == '.') {
+
+                    if (stoi(ipA.substr(posInicialA, i)) == stoi(ipB.substr(posInicialB, j))) {
+                        posInicialA = i + 1;
+                        posInicialB = j + 1;
+                    }
+                    else{
+                        return stoi(ipA.substr(posInicialA, i))  < stoi(ipB.substr(posInicialB, j));
+                    }
+                }
+            }
+        } 
+    }
+    return false;
     
-    float ipA = stof(a.ip); //ARREGLAR PARA QUE SE ORDENE BIEN
-    float ipB = stof(b.ip); //ARREGLAR PARA QUE SE ORDENE BIEN
-    
-    return ipA < ipB;
+    // ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO 
 }
 
 void read(vector<Registro>& registros);
