@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <vector>
+#include <regex>
 
 using namespace std;
 
@@ -38,32 +39,20 @@ bool compareRegistrosDate(const Registro& a, const Registro& b) {
 }
 
 bool compareRegistrosIp(const Registro& a, const Registro& b) {
-    // ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO 
-    string ipA = a.ip; 
-    string ipB = b.ip; 
-
-    int posInicialA = 0;
-    int posInicialB = 0;
-
-    for (int i = 0; i < ipA.size(); i++){
-        if (ipA[i] == '.') {
-            for (int j = 0; j < ipB.size(); j++){
-                if (ipB[j] == '.') {
-
-                    if (stoi(ipA.substr(posInicialA, i)) == stoi(ipB.substr(posInicialB, j))) {
-                        posInicialA = i + 1;
-                        posInicialB = j + 1;
-                    }
-                    else{
-                        return stoi(ipA.substr(posInicialA, i))  < stoi(ipB.substr(posInicialB, j));
-                    }
-                }
-            }
-        } 
-    }
-    return false;
+       // Divide las direcciones IP en componentes numéricos
+    istringstream a_stream(a.ip);
+    istringstream b_stream(b.ip);
     
-    // ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO - ARREGLAR ESTO 
+    int a1, a2, a3, a4, b1, b2, b3, b4;
+    char dot;
+    
+    a_stream >> a1 >> dot >> a2 >> dot >> a3 >> dot >> a4;
+    b_stream >> b1 >> dot >> b2 >> dot >> b3 >> dot >> b4;
+    
+    if (a1 != b1) return a1 < b1;
+    if (a2 != b2) return a2 < b2;
+    if (a3 != b3) return a3 < b3;
+    return a4 < b4;
 }
 
 void read(vector<Registro>& registros);
@@ -111,7 +100,6 @@ int main() {
 
             system("pause");
             break;
-
     }
 }
 
@@ -137,20 +125,29 @@ void read(vector<Registro>& registros) {
 void searchAndDisplayDate(const vector<Registro>& registros) {
     // Solicitar al usuario las fechas de inicio y fin de búsqueda
     string startDate, endDate;
-    cout << "Ingrese la fecha de inicio (MMM DD): ";
-    cin >> startDate;
-    cout << "Ingrese la fecha de fin (MMM DD): ";
-    cin >> endDate;
+    int startDay, endDay;
 
-    cout << "Registros entre " << startDate << " y " << endDate << ":" << endl;
+    cout << "Ingrese el mes de inicio (MMM): ";
+    cin >> startDate;
+    cout << "\nIngrese el dia de inicio: ";
+    cin >> startDay;
+
+    cout << "\nIngrese el mes de fin (MMM): ";
+    cin >> endDate;
+    cout << "\nIngrese el dia de fin: ";
+    cin >> endDay;
+
+    cout << "\nRegistros entre " << startDate << " " << startDay << " y " << endDate << " " << endDay << ":" << endl;
 
     for (const Registro& registro : registros){
 
         string entryDate = registro.fecha;
         int entryDay = registro.dia;
 
-        if ((entryDate >= startDate) && (entryDate <= endDate)) {         
-            cout << registro.fecha << " " << registro.dia << " " << registro.hora << " " << registro.ip << " " << registro.mensaje << endl;
+        if ((entryDate >= startDate) && (entryDate <= endDate)) {   
+            if ((entryDay >= startDay) && (entryDay <= endDay)) {
+                cout << registro.fecha << " " << registro.dia << " " << registro.hora << " " << registro.ip << " " << registro.mensaje << endl;
+            }
         }
     }
 }
@@ -183,7 +180,7 @@ void saveSortedData(const vector<Registro>& registros) {
     }
 
     for (const Registro& registro : registros) {
-        archivoOrdenado << registro.ip << " " << registro.fecha << " " << registro.dia << " " << registro.hora << " " << registro.mensaje << endl;
+        archivoOrdenado << registro.fecha << " " << registro.dia << " " << registro.hora << " " << registro.ip << " " << registro.mensaje << endl;
     }
 
     archivoOrdenado.close();
