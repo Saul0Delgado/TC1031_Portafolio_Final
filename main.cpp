@@ -26,10 +26,10 @@ bool compareRegistrosDate(const Registro& a, const Registro& b) {
         {"May", 5}, {"Jun", 6}, {"Jul", 7}, {"Aug", 8},
         {"Sep", 9}, {"Oct", 10}, {"Nov", 11}, {"Dec", 12}
     }; 
-    
+
     string monthA = a.fecha;
     string monthB = b.fecha;
-    
+
     // Compare the months using the numerical values
     if (months[monthA] != months[monthB]) {
         return months[monthA] < months[monthB];  // Sort by month in ascending order
@@ -42,13 +42,13 @@ bool compareRegistrosIp(const Registro& a, const Registro& b) {
        // Divide las direcciones IP en componentes numéricos
     istringstream a_stream(a.ip);
     istringstream b_stream(b.ip);
-    
+
     int a1, a2, a3, a4, b1, b2, b3, b4;
     char dot;
-    
+
     a_stream >> a1 >> dot >> a2 >> dot >> a3 >> dot >> a4;
     b_stream >> b1 >> dot >> b2 >> dot >> b3 >> dot >> b4;
-    
+
     if (a1 != b1) return a1 < b1;
     if (a2 != b2) return a2 < b2;
     if (a3 != b3) return a3 < b3;
@@ -124,30 +124,35 @@ void read(vector<Registro>& registros) {
 
 void searchAndDisplayDate(const vector<Registro>& registros) {
     // Solicitar al usuario las fechas de inicio y fin de búsqueda
-    string startDate, endDate;
+    string startMonth, endMonth;
     int startDay, endDay;
 
     cout << "Ingrese el mes de inicio (MMM): ";
-    cin >> startDate;
+    cin >> startMonth;
     cout << "\nIngrese el dia de inicio: ";
     cin >> startDay;
 
     cout << "\nIngrese el mes de fin (MMM): ";
-    cin >> endDate;
+    cin >> endMonth;
     cout << "\nIngrese el dia de fin: ";
     cin >> endDay;
 
-    cout << "\nRegistros entre " << startDate << " " << startDay << " y " << endDate << " " << endDay << ":" << endl;
+    cout << "\nRegistros entre " << startMonth << " " << startDay << " y " << endMonth << " " << endDay << ":" << endl;
+
+    // Orden de los meses
+    unordered_map<std::string, int> months = {
+        {"Jan", 1}, {"Feb", 2}, {"Mar", 3}, {"Apr", 4},
+        {"May", 5}, {"Jun", 6}, {"Jul", 7}, {"Aug", 8},
+        {"Sep", 9}, {"Oct", 10}, {"Nov", 11}, {"Dec", 12}
+    }; 
 
     for (const Registro& registro : registros){
-
-        string entryDate = registro.fecha;
+        string entryMonth = registro.fecha;
         int entryDay = registro.dia;
 
-        if ((entryDate >= startDate) && (entryDate <= endDate)) {   
-            if ((entryDay >= startDay) && (entryDay <= endDay)) {
-                cout << registro.fecha << " " << registro.dia << " " << registro.hora << " " << registro.ip << " " << registro.mensaje << endl;
-            }
+        if ((months[entryMonth] > months[startMonth] || (months[entryMonth] == months[startMonth] && entryDay >= startDay)) && 
+            (months[entryMonth] < months[endMonth] || (months[entryMonth] == months[endMonth] && entryDay <= endDay))) {         
+            cout << registro.fecha << " " << registro.dia << " " << registro.hora << " " << registro.ip << " " << registro.mensaje << endl;
         }
     }
 }
