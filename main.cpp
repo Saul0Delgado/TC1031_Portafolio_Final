@@ -39,7 +39,6 @@ bool compareRegistrosDate(const Registro& a, const Registro& b) {
 }
 
 bool compareRegistrosIp(const Registro& a, const Registro& b) {
-       // Divide las direcciones IP en componentes numéricos
     istringstream a_stream(a.ip);
     istringstream b_stream(b.ip);
 
