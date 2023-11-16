@@ -260,9 +260,10 @@ void counterIP(const vector<Registro>& registros) {
     Node *root = NULL;
     int counter = 1;
     string prevIp = 0;
+
     for (const Registro& registro : registros){ //checking each ip
+
         if (registro.ip != prevIp) { //checks that its not appeared before
-             
 
             if (root == NULL) {
             root = insertBST(root, counter, registro.ip);// inicial, declara root
@@ -272,9 +273,9 @@ void counterIP(const vector<Registro>& registros) {
 
             counter = 1; // reset counter
             prevIp = registro.ip;  // new ip
-        } else if (registro.ip == prevIp) { //same as before
-            counter++; // counter goes up, same ip
 
-        }
+        } else { //same as before
+            counter++; // counter goes up, same ip
+        } 
     }
 };
