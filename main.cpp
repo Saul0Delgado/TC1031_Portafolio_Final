@@ -125,13 +125,14 @@ int main() {
         case 2:
             //Node *root = NULL;
             //root = insertBST(root, registros[0].ip);
-             // Ordenar registros por Ip
+            // Ordenar registros por Ip
+            cout << to_string(registros.size()) << endl;
             sort(registros.begin(), registros.end(), compareRegistrosIp);
-            cout << size(registros) << endl;
+            cout << to_string(registros.size()) << endl;
 
             // Desplegar registros correspondientes a estas Ip
             searchAndDisplayIp(registros);
-            cout << size(registros) << endl;
+            cout << to_string(registros.size()) << endl;
             // Almacenar en un archivo el resultado del ordenamiento
             saveSortedData(registros);
 
@@ -161,7 +162,7 @@ void read(vector<Registro>& registros) {
 
     string line;
     Registro registro;
-    while (getline(archivo, line)) {
+    while (!archivo.eof()) {
         archivo >> registro.fecha >> registro.dia >> registro.hora >> registro.ip;
         // Leer el resto de la línea como el mensaje
         getline(archivo, registro.mensaje);
@@ -259,8 +260,8 @@ void counterIP(const vector<Registro>& registros) {
                 insertBST(counter, registro.ip);// va organizando on its way
             }
 
-            counter = 1; // reset counter
-            prevIp = registro.ip;  // new ip
+            //counter = 1; // reset counter
+            //prevIp = registro.ip;  // new ip
         } else if (registro.ip == prevIp) {
             counter++; // counter goes up, same ip
 
