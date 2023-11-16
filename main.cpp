@@ -24,23 +24,34 @@ struct Registro {
 
 //NODE CONSTRUCT AND INSERT OPTION
 struct Node {
-  
-    string data;
+    int data;
+    string ip_stored[30];
     Node *left,*right;
-    Node(string _data) {
+    Node(int _data, string _newIp) {
         data = _data;
+        ip_stored[0] = _newIp;
         left = right = NULL;
     }
 };
 
-Node* insertBST(Node *root, string _data){
+Node* insertBST(Node *root, int _data, string _newIp){
     if (root == NULL) {
-        return new Node(_data);
+        return new Node(_data, _newIp);
     }
     if (_data < root->data){
-        root->left = insertBST(root->left, _data);
-    }else {
-        root->right = insertBST(root->right, _data);
+        root->left = insertBST(root->left, _data, _newIp);
+    } else if (_data > root->data) {
+        root->right = insertBST(root->right, _data, _newIp);
+    } else if (_data == root->data) {
+        for (int i = 0; i < sizeof(root->ip_stored); i++){
+            if (root->ip_stored[i] == ""){
+                root->ip_stored[i] = _newIp;
+                break;
+            }
+        }
+
+    } else {
+        cout << "ERROR????" << endl;
     }
     return root;
 };
@@ -94,6 +105,7 @@ void read(vector<Registro>& registros);
 void searchAndDisplayDate(const vector<Registro>& registros);
 void searchAndDisplayIp(const vector<Registro>& registros);
 void saveSortedData(const vector<Registro>& registros);
+void counterIP(const vector<Registro>& registros);
 
 int main() {
     vector<Registro> registros;
@@ -125,18 +137,16 @@ int main() {
         case 2:
             //Node *root = NULL;
             //root = insertBST(root, registros[0].ip);
-            // Ordenar registros por Ip
-            cout << to_string(registros.size()) << endl;
-            sort(registros.begin(), registros.end(), compareRegistrosIp);
-            cout << to_string(registros.size()) << endl;
 
+
+            // Ordenar registros por Ip
+            sort(registros.begin(), registros.end(), compareRegistrosIp);
             // Desplegar registros correspondientes a estas Ip
             searchAndDisplayIp(registros);
-            cout << to_string(registros.size()) << endl;
             // Almacenar en un archivo el resultado del ordenamiento
             saveSortedData(registros);
 
-
+            counterIP(registros);
 
             //PASE COUNTER DE CADA IP 
             //STOPS WHEN ITS A DIFFERENT IP
@@ -248,21 +258,21 @@ void saveSortedData(const vector<Registro>& registros) {
 
 void counterIP(const vector<Registro>& registros) {
     Node *root = NULL;
-    Node *counter = NULL;
+    int counter = 1;
     string prevIp = 0;
     for (const Registro& registro : registros){ //checking each ip
         if (registro.ip != prevIp) { //checks that its not appeared before
              
 
             if (root == NULL) {
-            root = insertBST(counter, registro.ip);// inicial, declara root
+            root = insertBST(root, counter, registro.ip);// inicial, declara root
             } else {
-                insertBST(counter, registro.ip);// va organizando on its way
+                insertBST(root, counter, registro.ip);// va organizando on its way
             }
 
-            //counter = 1; // reset counter
-            //prevIp = registro.ip;  // new ip
-        } else if (registro.ip == prevIp) {
+            counter = 1; // reset counter
+            prevIp = registro.ip;  // new ip
+        } else if (registro.ip == prevIp) { //same as before
             counter++; // counter goes up, same ip
 
         }
