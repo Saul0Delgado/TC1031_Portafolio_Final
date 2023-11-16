@@ -123,14 +123,15 @@ int main() {
             break;
 
         case 2:
-            Node *root = NULL;
-            root = insertBST(root, registros[0].ip);
+            //Node *root = NULL;
+            //root = insertBST(root, registros[0].ip);
              // Ordenar registros por Ip
             sort(registros.begin(), registros.end(), compareRegistrosIp);
+            cout << size(registros) << endl;
 
             // Desplegar registros correspondientes a estas Ip
             searchAndDisplayIp(registros);
-
+            cout << size(registros) << endl;
             // Almacenar en un archivo el resultado del ordenamiento
             saveSortedData(registros);
 
@@ -141,7 +142,7 @@ int main() {
             //COUNTER + IP ADDED IN THE BST
 
 
-
+            
             
 
 
@@ -243,6 +244,7 @@ void saveSortedData(const vector<Registro>& registros) {
 
 
 //  COUNTER Y ARBOL BST
+
 void counterIP(const vector<Registro>& registros) {
     Node *root = NULL;
     Node *counter = NULL;
