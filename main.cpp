@@ -19,6 +19,42 @@ struct Registro {
     string mensaje;
 };
 
+
+
+
+//NODE CONSTRUCT AND INSERT OPTION
+struct Node {
+  
+    string data;
+    Node *left,*right;
+    Node(string _data) {
+        data = _data;
+        left = right = NULL;
+    }
+};
+
+Node* insertBST(Node *root, string _data){
+    if (root == NULL) {
+        return new Node(_data);
+    }
+    if (_data < root->data){
+        root->left = insertBST(root->left, _data);
+    }else {
+        root->right = insertBST(root->right, _data);
+    }
+    return root;
+};
+
+
+
+
+
+
+
+
+
+
+
 bool compareRegistrosDate(const Registro& a, const Registro& b) {
     // Orden de los meses
     unordered_map<std::string, int> months = {
@@ -87,7 +123,8 @@ int main() {
             break;
 
         case 2:
-
+            Node *root = NULL;
+            root = insertBST(root, registros[0].ip);
              // Ordenar registros por Ip
             sort(registros.begin(), registros.end(), compareRegistrosIp);
 
@@ -96,6 +133,18 @@ int main() {
 
             // Almacenar en un archivo el resultado del ordenamiento
             saveSortedData(registros);
+
+
+
+            //PASE COUNTER DE CADA IP 
+            //STOPS WHEN ITS A DIFFERENT IP
+            //COUNTER + IP ADDED IN THE BST
+
+
+
+            
+
+
 
             system("pause");
             break;
@@ -189,3 +238,30 @@ void saveSortedData(const vector<Registro>& registros) {
 
     archivoOrdenado.close();
 }
+
+
+
+
+//  COUNTER Y ARBOL BST
+void counterIP(const vector<Registro>& registros) {
+    Node *root = NULL;
+    Node *counter = NULL;
+    string prevIp = 0;
+    for (const Registro& registro : registros){ //checking each ip
+        if (registro.ip != prevIp) { //checks that its not appeared before
+             
+
+            if (root == NULL) {
+            root = insertBST(counter, registro.ip);// inicial, declara root
+            } else {
+                insertBST(counter, registro.ip);// va organizando on its way
+            }
+
+            counter = 1; // reset counter
+            prevIp = registro.ip;  // new ip
+        } else if (registro.ip == prevIp) {
+            counter++; // counter goes up, same ip
+
+        }
+    }
+};
