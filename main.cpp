@@ -19,9 +19,6 @@ struct Registro {
     string mensaje;
 };
 
-
-
-
 //NODE CONSTRUCT AND INSERT OPTION
 struct Node {
     int data;
@@ -35,6 +32,8 @@ struct Node {
 };
 
 Node* insertBST(Node *root, int _data, string _newIp){
+    
+    
     if (root == NULL) {
         return new Node(_data, _newIp);
     }
@@ -259,7 +258,7 @@ void saveSortedData(const vector<Registro>& registros) {
 void counterIP(const vector<Registro>& registros) {
     Node *root = NULL;
     int counter = 1;
-    string prevIp = 0;
+    string prevIp = "";
 
     for (const Registro& registro : registros){ //checking each ip
 
@@ -277,5 +276,32 @@ void counterIP(const vector<Registro>& registros) {
         } else { //same as before
             counter++; // counter goes up, same ip
         } 
+    }
+};
+
+
+Node* searchNodes(Node* root){
+    int bigIps = 0;
+    string prevKey = "";
+
+    
+    while (bigIps != 5) {
+        
+        if (root->right != NULL) // (root->right->data = prevKey) ARREGLAR ESTO PARA QUE CHEQUE SI NO ES IGUAL AL QUE YA CHECO
+
+        if (root->right == NULL){ 
+
+            for (int i = 0; i < 5; i++){
+                if (root->ip_stored[i] != NULL) {
+                    cout << root->ip_stored[i] << endl;
+                    bigIps++;
+
+                } else {
+                    prevKey = root->data;
+                    break;
+                }
+            }
+
+        }
     }
 };
