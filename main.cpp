@@ -19,6 +19,44 @@ struct Registro {
     string mensaje;
 };
 
+<<<<<<< Updated upstream
+=======
+//NODE CONSTRUCT AND INSERT OPTION
+struct Node {
+    int data;
+    string ip_stored[30];
+    Node *left,*right;
+    Node(int _data, string _newIp) {
+        data = _data;
+        ip_stored[0] = _newIp;
+        left = right = NULL;
+    }
+};
+
+Node* insertBST(Node* root, int _data, string _newIp) {
+    if (root == NULL) {
+        return new Node(_data, _newIp);
+    }
+    if (_data < root->data) {
+        root->left = insertBST(root->left, _data, _newIp);
+    } else if (_data > root->data) {
+        root->right = insertBST(root->right, _data, _newIp);
+    } else if (_data == root->data) {
+        for (int i = 0; i < sizeof(root->ip_stored) / sizeof(root->ip_stored[0]); i++) {
+            if (root->ip_stored[i] == "") {
+                root->ip_stored[i] = _newIp;
+                break;
+            }
+        }
+    } else {
+        cout << "ERROR?" << endl;
+    }
+    return root;
+}
+
+
+
+>>>>>>> Stashed changes
 bool compareRegistrosDate(const Registro& a, const Registro& b) {
     // Orden de los meses
     unordered_map<std::string, int> months = {
@@ -55,10 +93,17 @@ bool compareRegistrosIp(const Registro& a, const Registro& b) {
     return a4 < b4;
 }
 
+// 
 void read(vector<Registro>& registros);
 void searchAndDisplayDate(const vector<Registro>& registros);
 void searchAndDisplayIp(const vector<Registro>& registros);
 void saveSortedData(const vector<Registro>& registros);
+<<<<<<< Updated upstream
+=======
+void counterIP(const vector<Registro>& registros, Node*& root);
+void searchNodes(Node* root, vector<Node*>& recurrentes);
+void sortNodes(vector<Node*>& recurrentes);
+>>>>>>> Stashed changes
 
 int main() {
     vector<Registro> registros;
@@ -84,10 +129,14 @@ int main() {
             // Almacenar en un archivo el resultado del ordenamiento
             saveSortedData(registros);
 
-            system("pause");
-            break;
+            return 0;
 
         case 2:
+<<<<<<< Updated upstream
+=======
+            Node *root = NULL;
+            vector<Node*> recurrentes;
+>>>>>>> Stashed changes
 
              // Ordenar registros por Ip
             sort(registros.begin(), registros.end(), compareRegistrosIp);
@@ -98,8 +147,30 @@ int main() {
             // Almacenar en un archivo el resultado del ordenamiento
             saveSortedData(registros);
 
+<<<<<<< Updated upstream
             system("pause");
             break;
+=======
+
+
+
+            counterIP(registros, root);
+
+            searchNodes(root, recurrentes);
+
+            sortNodes(recurrentes);
+
+
+            for (const auto& node : recurrentes) {
+                for (int i = 0; i < 5; i++) {
+                    if (node->ip_stored[i] != "") {
+                        cout << "IP: " << node->ip_stored[i] << ", Occurrences: " << node->data << endl;
+                    }
+                }
+            }
+
+            return 0;
+>>>>>>> Stashed changes
     }
 }
 
@@ -189,4 +260,65 @@ void saveSortedData(const vector<Registro>& registros) {
     }
 
     archivoOrdenado.close();
+<<<<<<< Updated upstream
 }
+=======
+}
+
+
+
+
+//  COUNTER Y ARBOL BST
+
+void counterIP(const vector<Registro>& registros, Node*& root) {
+    int counter = 1;
+    string prevIp = "";
+
+    for (const Registro& registro : registros) {
+        if (registro.ip != prevIp) {
+            if (root == NULL) {
+                root = insertBST(root, counter, registro.ip);
+            } else {
+                insertBST(root, counter, registro.ip);
+            }
+
+            counter = 1;
+            prevIp = registro.ip;
+        } else {
+            counter++;
+        }
+    }
+}
+
+
+
+void searchNodes(Node* root, vector<Node*>& recurrentes) {
+    if (root == NULL) {
+        return;
+    }
+
+    searchNodes(root->right, recurrentes);
+
+    if (recurrentes.size() < 5) {
+        recurrentes.push_back(root);
+    } else {
+        // Find the minimum value among the top 5 nodes
+        auto minNode = min_element(recurrentes.begin(), recurrentes.end(),
+                                   [](Node* a, Node* b) { return a->data < b->data; });
+
+        // If the current node has a larger data value than the minimum, replace it
+        if (root->data > (*minNode)->data) {
+            *minNode = root;
+        }
+    }
+
+    searchNodes(root->left, recurrentes);
+}
+
+void sortNodes(vector<Node*>& recurrentes) {
+    sort(recurrentes.begin(), recurrentes.end(),
+         [](Node* a, Node* b) { return a->data > b->data; });
+}
+
+
+>>>>>>> Stashed changes
