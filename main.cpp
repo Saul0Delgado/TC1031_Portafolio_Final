@@ -136,6 +136,7 @@ int main() {
         case 2:
             //Node *root = NULL;
             //root = insertBST(root, registros[0].ip);
+            vector<Node*> recurrentes;
 
 
             // Ordenar registros por Ip
@@ -280,28 +281,22 @@ void counterIP(const vector<Registro>& registros) {
 };
 
 
-Node* searchNodes(Node* root){
-    int bigIps = 0;
-    string prevKey = "";
+Node* searchNodes(Node* root, vector<Node*>& recurrentes){
+    //int bigIps = 0;
+    //string prevKey = "";
 
+    if (root == NULL) { return; }
+
+    searchNodes(root->left, recurrentes);
     
-    while (bigIps != 5) {
-        
-        if (root->right != NULL) // (root->right->data = prevKey) ARREGLAR ESTO PARA QUE CHEQUE SI NO ES IGUAL AL QUE YA CHECO
-
-        if (root->right == NULL){ 
-
-            for (int i = 0; i < 5; i++){
-                if (root->ip_stored[i] != NULL) {
-                    cout << root->ip_stored[i] << endl;
-                    bigIps++;
-
-                } else {
-                    prevKey = root->data;
-                    break;
-                }
-            }
-
-        }
+    if (recurrentes.size() == 5) {
+        sort(recurrentes.begin(), recurrentes.end(), [](Node* a, Node* b) { return a->data > b->data; });
     }
+
+    if (recurrentes.size() == 5 && recurrentes.back()->data < root->data) {
+        recurrentes.pop_back();
+        recurrentes.push_back(root);
+    }
+
+    searchNodes(root->right, recurrentes);
 };
