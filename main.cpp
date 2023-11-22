@@ -39,8 +39,10 @@ Node* insertBST(Node *root, int _data, string _newIp){
     }
     if (_data < root->data){
         root->left = insertBST(root->left, _data, _newIp);
+
     } else if (_data > root->data) {
         root->right = insertBST(root->right, _data, _newIp);
+        
     } else if (_data == root->data) {
         for (int i = 0; i < sizeof(root->ip_stored); i++){
             if (root->ip_stored[i] == ""){
@@ -54,14 +56,6 @@ Node* insertBST(Node *root, int _data, string _newIp){
     }
     return root;
 };
-
-
-
-
-
-
-
-
 
 
 
@@ -105,6 +99,8 @@ void searchAndDisplayDate(const vector<Registro>& registros);
 void searchAndDisplayIp(const vector<Registro>& registros);
 void saveSortedData(const vector<Registro>& registros);
 void counterIP(const vector<Registro>& registros);
+Node* searchNodes(Node* root, vector<Node*>& recurrentes);
+
 
 int main() {
     vector<Registro> registros;
@@ -134,8 +130,8 @@ int main() {
             break;
 
         case 2:
-            //Node *root = NULL;
-            //root = insertBST(root, registros[0].ip);
+            Node *root = NULL;
+            root = insertBST(root, 0, registros[0].ip);
             vector<Node*> recurrentes;
 
 
@@ -148,14 +144,7 @@ int main() {
 
             counterIP(registros);
 
-            //PASE COUNTER DE CADA IP 
-            //STOPS WHEN ITS A DIFFERENT IP
-            //COUNTER + IP ADDED IN THE BST
-
-
-            
-            
-
+            searchNodes(root, recurrentes);
 
 
             system("pause");
@@ -282,21 +271,20 @@ void counterIP(const vector<Registro>& registros) {
 
 
 Node* searchNodes(Node* root, vector<Node*>& recurrentes){
-    //int bigIps = 0;
-    //string prevKey = "";
 
-    if (root == NULL) { return; }
+    if (root == NULL) { return NULL; }
 
     searchNodes(root->left, recurrentes);
     
-    if (recurrentes.size() == 5) {
-        sort(recurrentes.begin(), recurrentes.end(), [](Node* a, Node* b) { return a->data > b->data; });
+    if (recurrentes.size() < 5) {
+        recurrentes.push_back(root);
     }
-
-    if (recurrentes.size() == 5 && recurrentes.back()->data < root->data) {
+    else if (recurrentes.back()->data < root->data) {
         recurrentes.pop_back();
         recurrentes.push_back(root);
     }
 
     searchNodes(root->right, recurrentes);
+
+    return recurrentes.back();
 };
