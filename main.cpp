@@ -19,8 +19,6 @@ struct Registro {
     string mensaje;
 };
 
-<<<<<<< Updated upstream
-=======
 //NODE CONSTRUCT AND INSERT OPTION
 struct Node {
     int data;
@@ -56,7 +54,6 @@ Node* insertBST(Node* root, int _data, string _newIp) {
 
 
 
->>>>>>> Stashed changes
 bool compareRegistrosDate(const Registro& a, const Registro& b) {
     // Orden de los meses
     unordered_map<std::string, int> months = {
@@ -93,17 +90,15 @@ bool compareRegistrosIp(const Registro& a, const Registro& b) {
     return a4 < b4;
 }
 
-// 
+
 void read(vector<Registro>& registros);
 void searchAndDisplayDate(const vector<Registro>& registros);
 void searchAndDisplayIp(const vector<Registro>& registros);
 void saveSortedData(const vector<Registro>& registros);
-<<<<<<< Updated upstream
-=======
+
 void counterIP(const vector<Registro>& registros, Node*& root);
 void searchNodes(Node* root, vector<Node*>& recurrentes);
 void sortNodes(vector<Node*>& recurrentes);
->>>>>>> Stashed changes
 
 int main() {
     vector<Registro> registros;
@@ -132,11 +127,9 @@ int main() {
             return 0;
 
         case 2:
-<<<<<<< Updated upstream
-=======
             Node *root = NULL;
             vector<Node*> recurrentes;
->>>>>>> Stashed changes
+
 
              // Ordenar registros por Ip
             sort(registros.begin(), registros.end(), compareRegistrosIp);
@@ -146,12 +139,6 @@ int main() {
 
             // Almacenar en un archivo el resultado del ordenamiento
             saveSortedData(registros);
-
-<<<<<<< Updated upstream
-            system("pause");
-            break;
-=======
-
 
 
             counterIP(registros, root);
@@ -170,7 +157,6 @@ int main() {
             }
 
             return 0;
->>>>>>> Stashed changes
     }
 }
 
@@ -260,9 +246,6 @@ void saveSortedData(const vector<Registro>& registros) {
     }
 
     archivoOrdenado.close();
-<<<<<<< Updated upstream
-}
-=======
 }
 
 
@@ -319,6 +302,3 @@ void sortNodes(vector<Node*>& recurrentes) {
     sort(recurrentes.begin(), recurrentes.end(),
          [](Node* a, Node* b) { return a->data > b->data; });
 }
-
-
->>>>>>> Stashed changes
