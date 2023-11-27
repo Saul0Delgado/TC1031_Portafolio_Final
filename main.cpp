@@ -248,9 +248,6 @@ void saveSortedData(const vector<Registro>& registros) {
     archivoOrdenado.close();
 }
 
-
-
-
 //  COUNTER Y ARBOL BST
 
 void counterIP(const vector<Registro>& registros, Node*& root) {
